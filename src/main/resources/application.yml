@@ -1,0 +1,63 @@
+
+server:
+  port: 0
+
+
+spring:
+  application:
+    name: order-service
+  #서버모니터링 지킨서버에 저장
+  zipkin:
+    base-url: http://127.0.0.1:9411
+    enabled: true
+  sleuth:
+    sampler:
+      probability: 1.0  # 100퍼센트 다 지킨서버에 전달
+
+
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+      path: /h2-console
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+
+  datasource:
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:mem:testdb
+#    username : sa
+#    password : 123
+     url: jdbc:mariadb://localhost:3306/mydb
+     driver-class-name: org.mariadb.jdbc.Driver
+     username : root
+     password : test1357
+
+
+
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance.id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defalutZone: http://127.0.0.1:8761/eureka
+
+
+#logging:
+#  level:
+#    orderservice : DEBUG
+
+
+#포함시키고자하는 엔드포인트 지정  acturater
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health , beans ,busrefresh ,info, prometheus, metrics #버스 추가  모니터링 prometheus 추가  metrics이용 @Timep메서드 이용
